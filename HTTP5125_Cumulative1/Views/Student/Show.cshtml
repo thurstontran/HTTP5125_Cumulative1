@@ -1,0 +1,21 @@
+﻿@model HTTP5125_Cumulative1.Models.Student
+@{
+    ViewBag.Title = "Show";
+}
+
+<a class="navlink" href="/Student/List">Back to Students</a>
+<div id="containershow">
+    <h2>Name: @Model.StudentFname @Model.StudentLname</h2>
+    <p>Student Number: @Model.StudentNum</p>
+    <p>Enrol Date: @Model.EnrolDate</p>
+
+    <div id="classes-container">
+        <p>Classes:</p>
+        @foreach(var classes in Model.Classes)
+            {
+                <p>@classes</p>
+            }
+    </div>
+</div>
+
+

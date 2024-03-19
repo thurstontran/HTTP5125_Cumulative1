@@ -1,0 +1,21 @@
+﻿@model IEnumerable<HTTP5125_Cumulative1.Models.Student>
+@{
+    ViewBag.Title = "List";
+}
+
+<div id="containerlist">
+    <h2>List of Students</h2>
+    <form action="/Student/List" method="GET">
+        <input type="text" name="SearchKey" autcomplete="off" />
+        <input type="submit" value="Search" />
+    </form>
+    @foreach (var Student in Model)
+    {
+        <div class="listitem row">
+            <div class="col-md-12"><a href="/Student/Show/@Student.StudentId">@Student.StudentFname @Student.StudentLname</a></div>
+        </div>
+    }
+</div>
+
+
+

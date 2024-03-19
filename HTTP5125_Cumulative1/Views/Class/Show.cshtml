@@ -1,0 +1,16 @@
+﻿@model HTTP5125_Cumulative1.Models.Class
+
+@{
+    ViewBag.Title = "Show";
+}
+
+<a class="navlink" href="/Class/List">Back to Classes</a>
+<div id="containershow">
+    <h2>@Model.ClassName</h2>
+    <p>Course Code: @Model.ClassCode</p>
+    <p>Course Instructor: @Model.TeacherFname @Model.TeacherLname</p>
+    <p>Start Date: @Model.StartDate</p>
+    <p>Finish Date: @Model.FinishDate</p>
+</div>
+
+
