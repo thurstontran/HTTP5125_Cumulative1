@@ -86,15 +86,13 @@ namespace HTTP5125_Cumulative1.Controllers {
             MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
-            //Join the teachers and the classes table to display class information associated with teacher
-            string query = "SELECT teachers.*, classes.classcode, classes.classname, classes.classid FROM teachers LEFT OUTER JOIN classes ON classes.teacherid = teachers.teacherid WHERE classes.teacherid = @id";
+            //Simply select alll the teacher information when identified by their id
+            string query = "SELECT * FROM teachers WHERE teacherid = " + id;
             cmd.CommandText = query;
             
             //Define what the @id is
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Prepare();
-            //Populate a list to store the classes taught by the teacher
-            List<string> ClassList = new List<string>();
 
             MySqlDataReader ResultSet = cmd.ExecuteReader();
 
@@ -112,10 +110,34 @@ namespace HTTP5125_Cumulative1.Controllers {
                 NewTeacher.EmployeeNum = EmployeeNum;
                 NewTeacher.HireDate = HireDate;
                 NewTeacher.Salary = Salary;
+            }
 
+            Conn.Close();
+
+            MySqlConnection NewConn = School.AccessDatabase();
+            //Open a new connection between the web server and database
+            NewConn.Open();
+
+            //Establish a new SQL query for our database
+            MySqlCommand NewCmd = NewConn.CreateCommand();
+
+            //Join the teachers and classes table to display class information associated by teacher
+            string NewQuery = "SELECT teachers.*, classes.classcode, classes.classname, classes.classid FROM teachers LEFT OUTER JOIN classes ON classes.teacherid = teachers.teacherid WHERE classes.teacherid = @teacherid";
+            NewCmd.CommandText = NewQuery;
+
+            //Define the what @teacherid is
+            NewCmd.Parameters.AddWithValue("@teacherid", id);
+            NewCmd.Prepare();
+
+            //Populate a list to store the classes taught by the teacher
+            List<string> ClassList = new List<string>();
+
+            ResultSet = NewCmd.ExecuteReader();
+
+            while(ResultSet.Read()) {
                 //if course data exists, add it to the list and display the corresponding course information into the list of classes
-                if (ResultSet["classname"] != null) {
-                    string classes = ResultSet["classcode"].ToString()+" - "+ResultSet["classname"].ToString();
+                if (ResultSet["classname"] != null)  {
+                    string classes = ResultSet["classcode"].ToString() + " - " + ResultSet["classname"].ToString();
                     ClassList.Add(classes);
                 }
                 //if there is no courses data, simply state no data
@@ -123,8 +145,11 @@ namespace HTTP5125_Cumulative1.Controllers {
                     ClassList.Add("No classes data available");
                 }
             }
+ 
             NewTeacher.Classes = ClassList;
-            Conn.Close();
+
+            //Close the new connection
+            NewConn.Close();
 
             return NewTeacher;
         }
