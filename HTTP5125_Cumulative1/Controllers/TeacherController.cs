@@ -25,10 +25,10 @@ namespace HTTP5125_Cumulative1.Controllers {
         //GET : localhost:xx/Teacher/Show/{TeacherId} --> Show a particular teacher matching that ID
         public ActionResult Show(int id) {
             TeacherDataController controller = new TeacherDataController();
-            Teacher NewTeacher = controller.FindTeacher(id);
+            Teacher SelectedTeacher = controller.FindTeacher(id);
 
             //navigate to Views/Teacher/Show.cshtml
-            return View(NewTeacher);
+            return View(SelectedTeacher);
         }
     }
 }

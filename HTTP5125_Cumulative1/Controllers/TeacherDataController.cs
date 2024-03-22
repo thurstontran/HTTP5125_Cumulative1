@@ -69,6 +69,7 @@ namespace HTTP5125_Cumulative1.Controllers {
             //Return the final list of teacher names
             return Teachers;
         }
+
         ///<summary>
         /// Find the teacher in the system given an ID
         ///</summary>
@@ -77,20 +78,16 @@ namespace HTTP5125_Cumulative1.Controllers {
         [HttpGet]
         [Route("api/TeacherData/FindTeacher/{id}")]
         public Teacher FindTeacher(int id) {
+
             Teacher NewTeacher = new Teacher();
-
             MySqlConnection Conn = School.AccessDatabase();
-
             Conn.Open();
-
             MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
             //Simply select alll the teacher information when identified by their id
             string query = "SELECT * FROM teachers WHERE teacherid = " + id;
             cmd.CommandText = query;
-            
-            //Define what the @id is
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Prepare();
 
@@ -139,10 +136,6 @@ namespace HTTP5125_Cumulative1.Controllers {
                 if (ResultSet["classname"] != null)  {
                     string classes = ResultSet["classcode"].ToString() + " - " + ResultSet["classname"].ToString();
                     ClassList.Add(classes);
-                }
-                //if there is no courses data, simply state no data
-                else {
-                    ClassList.Add("No classes data available");
                 }
             }
  

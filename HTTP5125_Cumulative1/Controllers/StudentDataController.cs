@@ -67,6 +67,7 @@ namespace HTTP5125_Cumulative1.Controllers {
             //Return the final list of student names
             return Students;
         }
+
         ///<summary>
         /// Find the student in the system given an ID
         ///</summary>
@@ -76,19 +77,14 @@ namespace HTTP5125_Cumulative1.Controllers {
         [Route("api/StudentData/FindStudent/{id}")]
         public Student FindStudent(int id) {
             Student NewStudent = new Student();
-
             MySqlConnection Conn = School.AccessDatabase();
-
             Conn.Open();
-
             MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
             //Simply select select all the student information when identified by their id
             string query = "SELECT * FROM students WHERE studentid = " + id;
             cmd.CommandText = query;
-
-            //Define what the @id is
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Prepare();
 
@@ -108,8 +104,6 @@ namespace HTTP5125_Cumulative1.Controllers {
                 NewStudent.EnrolDate = EnrolDate;
             }
 
-            Conn.Close();
-           
             MySqlConnection NewConn = School.AccessDatabase();
             //Open a new connection between the web server and database
             NewConn.Open();
@@ -120,8 +114,6 @@ namespace HTTP5125_Cumulative1.Controllers {
             //Join the studentsxclasses table with the students table as well as classes table to display the information associated with students enrolled courses
             string NewQuery = "SELECT classes.classcode, classes.classname FROM students LEFT OUTER join studentsxclasses ON studentsxclasses.studentid=students.studentid JOIN classes ON classes.classid=studentsxclasses.classid WHERE students.studentid=@studentid";
             NewCmd.CommandText = NewQuery;
-
-            //Define the what @studentid is
             NewCmd.Parameters.AddWithValue("@studentid", id);
             NewCmd.Prepare();
 
@@ -130,17 +122,12 @@ namespace HTTP5125_Cumulative1.Controllers {
 
             ResultSet = NewCmd.ExecuteReader();
 
-
             while (ResultSet.Read()) {
 
                 //if course data exists, add it to the list and display the corresponding course information into the list of classes
                 if (ResultSet["classname"] != null) {
                     string classes = ResultSet["classcode"].ToString()+" - "+ResultSet["classname"].ToString();
                     ClassList.Add(classes);
-                 }
-                //if there is no courses data, simply state no data
-                else {
-                    ClassList.Add("No classes data available");
                  }
             }
 

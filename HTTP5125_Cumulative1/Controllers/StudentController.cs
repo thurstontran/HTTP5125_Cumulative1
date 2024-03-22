@@ -25,10 +25,10 @@ namespace HTTP5125_Cumulative1.Controllers {
         //GET : localhost:xx/Student/Show/{StudentId} --> Show a particular student matching that ID
         public ActionResult Show(int id) {
             StudentDataController controller = new StudentDataController();
-            Student NewStudent = controller.FindStudent(id);
+            Student SelectedStudent = controller.FindStudent(id);
 
             //navigate to Views/Student/Show.cshtml
-            return View(NewStudent);
+            return View(SelectedStudent);
         }
     }
 }

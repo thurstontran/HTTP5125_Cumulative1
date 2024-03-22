@@ -33,8 +33,6 @@ namespace HTTP5125_Cumulative1.Controllers {
             //SQL QUERY
             string query = "SELECT * FROM classes WHERE classcode LIKE lower(@key) OR classname LIKE lower(@key)";
             cmd.CommandText = query;
-
-            //Define what the @key is
             cmd.Parameters.AddWithValue("@key", "%" + SearchKey + "%");
             cmd.Prepare();
 
@@ -70,6 +68,7 @@ namespace HTTP5125_Cumulative1.Controllers {
             //Return the final list of teacher names
             return Classes;
         }
+
         ///<summary>
         /// Find the teacher in the system given an ID
         ///</summary>
@@ -79,19 +78,14 @@ namespace HTTP5125_Cumulative1.Controllers {
         [Route("api/ClassData/FindClass/{id}")]
         public Class FindClass(int id) {
             Class NewClass = new Class();
-
             MySqlConnection Conn = School.AccessDatabase();
-
             Conn.Open();
-
             MySqlCommand cmd = Conn.CreateCommand();
 
             //SQL QUERY
             //Join the teachers and the classes table to display teachers information associated with classes
             String query = "SELECT classes.*, teachers.teacherfname, teachers.teacherlname FROM classes LEFT OUTER JOIN teachers ON teachers.teacherid = classes.teacherid WHERE classes.classid = @id";
             cmd.CommandText = query;
-
-            //Define what the @id is
             cmd.Parameters.AddWithValue("@id", id);
             cmd.Prepare();
 
